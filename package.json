@@ -18,6 +18,7 @@
   },
   "homepage": "https://github.com/boujee-booleans/reviews#readme",
   "dependencies": {
+    "bluebird": "^3.7.2",
     "express": "^4.18.3",
     "node": "^21.7.1",
     "path": "^0.12.7",
