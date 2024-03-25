@@ -1,3 +1,5 @@
+/* eslint-disable camelcase */
+/* eslint-disable max-len */
 /* eslint-disable quotes */
 /* eslint-disable import/no-extraneous-dependencies */
 const { Client } = require('pg');
@@ -61,5 +63,29 @@ JOIN characteristics c ON avg_value.characteristic_id = c.id
 FROM reviews r
 WHERE r.product_id = $1 AND r.reported = false
 GROUP BY r.product_id`, [productID]);
+
+// db.addReview = (product_id, rating, summary, body, recommend, name, email, photos, characteristics) => db.queryAsync(`DO $$
+// DECLARE
+//     new_review_id INT;
+// BEGIN
+//     INSERT INTO reviews (product_id, rating, date, summary, body, recommend, reviewer_name, reviewer_email, helpfulness)
+//     VALUES ($1, $2, extract(epoch from now()) * 1000, $3, $4, $5, $6, $7, 0)
+//     RETURNING id INTO new_review_id;
+
+//     INSERT INTO reviews_photos (review_id, url)
+//     SELECT new_review_id, unnest($8::text[]);
+
+//     INSERT INTO characteristic_reviews (characteristic_id, review_id, value)
+//     SELECT key::integer, new_review_id, value::integer
+//     FROM jsonb_each_text($9::jsonb);
+// END $$;`, [product_id, rating, summary, body, recommend, name, email, photos, characteristics]);
+
+db.markHelpful = (review_id) => db.queryAsync(`UPDATE reviews
+  SET helpfulness = helpfulness + 1
+  WHERE id = $1`, [review_id]);
+
+db.reportReview = (review_id) => db.queryAsync(`UPDATE reviews
+  SET reported = true
+  WHERE id = $1`, [review_id]);
 
 module.exports = db;
