@@ -25,20 +25,20 @@ app.get('/reviews/meta', (req, res) => {
     .catch((err) => res.status(500).send(err));
 });
 
-app.post('/reviews', (req, res) => {
-  const {
-    product_id, rating, summary, body, recommend, name, email, photos, characteristics,
-  } = req.body;
-  console.log(req.body);
-  db.addReview(product_id, rating, summary, body, recommend, name, email, photos, characteristics)
-    .then((result) => {
-      res.status(201).send(result);
-    })
-    .catch((error) => {
-      console.log(error);
-      res.status(500).send(error);
-    });
-});
+// app.post('/reviews', (req, res) => {
+//   const {
+//     product_id, rating, summary, body, recommend, name, email, photos, characteristics,
+//   } = req.body;
+//   console.log(req.body);
+//   db.addReview(product_id, rating, summary, body, recommend, name, email, photos, characteristics)
+//     .then((result) => {
+//       res.status(201).send(result);
+//     })
+//     .catch((error) => {
+//       console.log(error);
+//       res.status(500).send(error);
+//     });
+// });
 
 app.put('/reviews/:review_id/helpful', (req, res) => {
   db.markHelpful(req.params.review_id)

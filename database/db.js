@@ -6,7 +6,11 @@ const { Client } = require('pg');
 const Promise = require('bluebird');
 
 const connection = new Client({
-  database: 'reviews',
+  user: 'ubuntu',
+  host: '172.31.46.93',
+  database: 'reviewsec2',
+  password: 'reviews',
+  port: 5432,
 });
 
 const db = Promise.promisifyAll(connection, { multiArgs: true });
