@@ -11,7 +11,7 @@ const connection = new Client({
   user: process.env.PGUSER,
   password: process.env.PGPASSWORD,
   database: process.env.PGDATABASE,
-  port: process.eng.PGPORT,
+  port: process.env.PGPORT,
 });
 
 const db = Promise.promisifyAll(connection, { multiArgs: true });
