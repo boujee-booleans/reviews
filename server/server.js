@@ -8,6 +8,7 @@ const app = express();
 const PORT = 3000;
 
 app.use(express.json());
+app.use(express.static('./public'));
 
 app.get('/reviews/', (req, res) => {
   db.exportReviews(req.body.page, req.body.count, req.body.sort, req.body.product_id)
