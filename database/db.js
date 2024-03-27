@@ -4,13 +4,14 @@
 /* eslint-disable import/no-extraneous-dependencies */
 const { Client } = require('pg');
 const Promise = require('bluebird');
+require('dotenv').config();
 
 const connection = new Client({
-  user: 'postgres',
-  host: '3.147.140.221',
-  database: 'reviewsec2',
-  password: 'reviews',
-  port: 5432,
+  host: process.env.PGHOST,
+  user: process.env.PGUSER,
+  password: process.env.PGPASSWORD,
+  database: process.env.PGDATABASE,
+  port: process.eng.PGPORT,
 });
 
 const db = Promise.promisifyAll(connection, { multiArgs: true });
