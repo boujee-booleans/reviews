@@ -1,9 +1,11 @@
 /* eslint-disable camelcase */
 /* eslint-disable import/extensions */
 const express = require('express');
+const NodeCache = require('node-cache');
 const db = require('../database/db.js');
 
 const app = express();
+const reviewsCache = new NodeCache({ stdTTL: 60 });
 
 const PORT = 3000;
 
@@ -11,11 +13,18 @@ app.use(express.json());
 app.use(express.static('./public'));
 
 app.get('/reviews/', (req, res) => {
-  db.exportReviews(req.body.page, req.body.count, req.body.sort, req.body.product_id)
-    .then((result) => {
-      res.status(200).send(result[0].rows[0]);
-    })
-    .catch((err) => res.status(500).send(err));
+  const cachedReviewResults = reviewsCache.get(req.body);
+  if (cachedReviewResults) {
+    res.status(200).send(cachedReviewResults);
+    console.log('Sent cached results!');
+  } else {
+    db.exportReviews(req.body.page, req.body.count, req.body.sort, req.body.product_id)
+      .then((result) => {
+        reviewsCache.set(req.body, result[0].rows[0]);
+        res.status(200).send(result[0].rows[0]);
+      })
+      .catch((err) => res.status(500).send(err));
+  }
 });
 
 app.get('/reviews/meta', (req, res) => {
