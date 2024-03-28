@@ -29,18 +29,18 @@ app.get('/reviews/', (req, res) => {
 });
 
 app.get('/reviews/meta/:product_id', (req, res) => {
-  // const metaReqParamString = JSON.stringify(req.params);
-  // const cachedMetaResults = metaCache.get(metaReqParamString);
-  // if (cachedMetaResults) {
-  //   res.status(200).send(cachedMetaResults);
-  // } else {
+  const metaReqParamString = JSON.stringify(req.params);
+  const cachedMetaResults = metaCache.get(metaReqParamString);
+  if (cachedMetaResults) {
+    res.status(200).send(cachedMetaResults);
+  } else {
     db.exportReviewsMeta(req.params.product_id)
       .then((result) => {
-        // metaCache.set(metaReqParamString, result[0].rows[0].json_build_object);
+        metaCache.set(metaReqParamString, result[0].rows[0].json_build_object);
         res.status(200).send(result[0].rows[0].json_build_object);
       })
       .catch((err) => res.status(500).send(err));
-  // }
+  }
 });
 
 // app.post('/reviews', (req, res) => {
