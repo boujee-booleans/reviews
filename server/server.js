@@ -28,15 +28,16 @@ app.get('/reviews/', (req, res) => {
   }
 });
 
-app.get('/reviews/meta', (req, res) => {
-  const metaReqBodyString = JSON.stringify(req.body);
-  const cachedMetaResults = metaCache.get(metaReqBodyString);
+app.get('/reviews/meta/:product_id', (req, res) => {
+  console.log(req.params);
+  const metaReqParamString = JSON.stringify(req.params);
+  const cachedMetaResults = metaCache.get(metaReqParamString);
   if (cachedMetaResults) {
     res.status(200).send(cachedMetaResults);
   } else {
-    db.exportReviewsMeta(req.body.product_id)
+    db.exportReviewsMeta(req.params.product_id)
       .then((result) => {
-        metaCache.set(metaReqBodyString, result[0].rows[0].json_build_object);
+        metaCache.set(metaReqParamString, result[0].rows[0].json_build_object);
         res.status(200).send(result[0].rows[0].json_build_object);
       })
       .catch((err) => res.status(500).send(err));
