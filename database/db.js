@@ -7,11 +7,11 @@ const Promise = require('bluebird');
 require('dotenv').config();
 
 const connection = new Client({
-  // host: process.env.PGHOST,
-  // user: process.env.PGUSER,
-  // password: process.env.PGPASSWORD,
-  database: 'reviewsni',
-  // port: process.env.PGPORT,
+  host: process.env.PGHOST,
+  user: process.env.PGUSER,
+  password: process.env.PGPASSWORD,
+  database: process.env.PGDATABASE,
+  port: process.env.PGPORT,
 });
 
 const db = Promise.promisifyAll(connection, { multiArgs: true });
